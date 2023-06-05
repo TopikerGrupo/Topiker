@@ -1,0 +1,51 @@
+[
+    {
+        "saida" : "Sobral",
+        "Chegada" : "Camocim",
+        "vagas" : 16,
+        "preco_passageiro" : 27.50,
+        "preco_carga" : 13.25,
+        "horario_saida" : "10:00",
+        "horario_chegada" : "12:00",
+        "motorista" : "Francisvaldo",
+        "cobrador" : "Adalberto",
+        "coperativa" : "copitrace"
+    },
+    {
+        "saida" : "Sobral",
+        "Chegada" : "Camocim",
+        "vagas" : 20,
+        "preco_passageiro" : 27.50,
+        "preco_carga" : 13.25,
+        "horario_saida" : "8:00",
+        "horario_chegada" : "10:00",
+        "motorista" : "Brad pitt",
+        "cobrador" : "Tom cruz",
+        "coperativa" : "copitrace"
+    },
+    {
+        "saida" : "Sobral",
+        "Chegada" : "miraima",
+        "vagas" : 19,
+        "preco_passageiro" : 30.50,
+        "preco_carga" : 15.25,
+        "horario_saida" : "8:00",
+        "horario_chegada" : "11:00",
+        "motorista" : "Anderson Silva",
+        "cobrador" : "Vitor Belfort",
+        "coperativa" : "cootrans"
+    }
+    ,
+    {
+        "saida" : "Sobral",
+        "Chegada" : "Jijoca",
+        "vagas" : 15,
+        "preco_passageiro" : 40.5,
+        "preco_carga" : 20.25,
+        "horario_saida" : "8:00",
+        "horario_chegada" : "13:30",
+        "motorista" : "Anderson Silva",
+        "cobrador" : "Vitor Belfort",
+        "coperativa" : "cootransvace"
+    }
+]
