@@ -5,6 +5,6 @@ const usersRoutes = Router();
 const controller = new UsersController();
 
 usersRoutes.get("/list", controller.list);
-usersRoutes.get("/:id", controller.show)
+usersRoutes.get("/:id", controller.show);
 
 export {usersRoutes};
