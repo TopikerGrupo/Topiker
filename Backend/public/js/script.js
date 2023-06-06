@@ -41,6 +41,17 @@ $(document).ready(function(){
 });
 
 const buscar_rota = document.querySelector(".b-busca");
+const inverter = document.querySelector(".inverter")
+inverter.addEventListener("click", function (e){
+    e.preventDefault();
+    let input_origem = document.querySelector(".origem")
+    let input_destino = document.querySelector(".destino")
+    let origem = input_origem.value;
+    let destino = input_destino.value;
+    input_destino.value = origem;
+    input_origem.value = destino;
+
+})
 buscar_rota.addEventListener("click", function (e){
     e.preventDefault();
     const input_origem = document.querySelector(".origem").value;
