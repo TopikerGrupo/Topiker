@@ -9,3 +9,37 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+model User {
+  userID String @id @default(uuid())
+  email String  @unique
+  password String
+  cpf String @unique
+  name  String
+  status Int
+
+  @@map("users")
+}
+
+model Route{
+  routeID String @id @default(uuid())
+  horarioSaida DateTime
+  horarioChegada DateTime
+  saida String
+  chegada String
+  distanciaKm Float
+  PrecoPassageiro Float
+  PrecoCarga Float
+  IDTopic String
+
+  @@map("routes")
+}
+
+model Topic {
+  topicID String @id @default(uuid())
+  motoristaID String
+  cobradorId String
+  quantidadeAcentos Int
+
+  @@map("topics")
+}
+
