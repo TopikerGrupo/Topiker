@@ -9,37 +9,44 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  userID String @id @default(uuid())
-  email String  @unique
-  password String
-  cpf String @unique
-  name  String
-  status Int
+  userID        String  @id @default(uuid())
+  email         String  @unique
+  password      String
+  cpf           String  @unique
+  name          String
+  status        Int
+  TopicDigirir  Topic[] @relation("TopicDigirir")
+  TopicCobrador Topic[] @relation("TopicCobrador")
 
   @@map("users")
 }
 
-model Route{
-  routeID String @id @default(uuid())
-  horarioSaida DateTime
-  horarioChegada DateTime
-  saida String
-  chegada String
-  distanciaKm Float
-  PrecoPassageiro Float
-  PrecoCarga Float
-  IDTopic String
+model Route {
+  routeID              String   @id @default(uuid())
+  horarioSaida         DateTime
+  horarioChegada       DateTime
+  saida                String
+  chegada              String
+  distanciaKm          Float
+  PrecoPassageiro      Float
+  PrecoCarga           Float
+  IDTopic              String
+  topic                Topic    @relation(fields: [IDTopic], references: [topicID])
+  quantAcentosOcupados Int      @default(0)
 
   @@map("routes")
 }
 
 model Topic {
-  topicID String @id @default(uuid())
-  motoristaID String
-  cobradorId String
+  topicID           String  @id @default(uuid())
+  motoristaID       String
+  motorista         User    @relation(fields: [motoristaID], references: [userID], name: "TopicDigirir")
+  cobradorId        String
+  cobrador          User    @relation(fields: [cobradorId], references: [userID], name: "TopicCobrador")
   quantidadeAcentos Int
+  Route             Route[]
 
   @@map("topics")
 }
-
