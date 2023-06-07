@@ -15,19 +15,43 @@ export class UsersController {
         });
         response = response.status(200).json(user);
     }
-    // public async create(request:Request, response: Response){
-    //     const name = request.body.name;
-    //     const email = request.body.email;
-    //     const cpf = request.body.cpf;
-    //     const status = request.body.status;
-    //     const prisma = new PrismaClient();
-    //     const users = await prisma.user.create({
-    //         "data":{
-    //             name,
-    //             email,
-    //             cpf,
-    //             status
-    //         }
-    //     })
-    // }
+    public async create(request:Request, response: Response){
+        const {name, email, cpf, status, password} = request.body;
+        const prisma = new PrismaClient();
+        const user = await prisma.user.create({
+           data: {
+               email,
+               password,
+               cpf,
+               name,
+               status
+           },
+        });
+        return response.status(200).json(user);
+    }
+    public async update(request:Request, response: Response){
+        const userID = request.params.id;
+        const {name, email, cpf, status, password} = request.body;
+        const prisma = new PrismaClient();
+        const user = await prisma.user.update({
+           where:{userID},
+           data: {
+               email,
+               password,
+               cpf,
+               name,
+               status
+           },
+        });
+        return response.status(200).json(user);
+    }
+    public async delete(request: Request, response: Response){
+        const userID = request.params.id;
+        const prisma = new PrismaClient();
+        const user = await prisma.user.delete({
+            "where":{userID}
+        });
+        response = response.status(200).json({});
+    }
+     
 }
