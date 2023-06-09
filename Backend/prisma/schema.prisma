@@ -25,8 +25,8 @@ model User {
 
 model Route {
   routeID              String   @id @default(uuid())
-  horarioSaida         DateTime
-  horarioChegada       DateTime
+  horarioSaida         String
+  horarioChegada       String
   saida                String
   chegada              String
   distanciaKm          Float
@@ -34,7 +34,7 @@ model Route {
   PrecoCarga           Float
   IDTopic              String
   topic                Topic    @relation(fields: [IDTopic], references: [topicID])
-  quantAcentosOcupados Int      @default(0)
+  quantAcentosOcupados Int      
 
   @@map("routes")
 }
