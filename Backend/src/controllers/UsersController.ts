@@ -1,24 +1,21 @@
-import {PrismaClient} from '@prisma/client'
 import {Request, Response} from "express"
+import { prismaC } from '../prisma';
 
 export class UsersController {
     public async list(_request: Request, response: Response){
-        const prisma = new PrismaClient();
-        const users = await prisma.user.findMany();
+        const users = await prismaC.user.findMany();
         response = response.status(200).json(users);
     }
     public async show(request: Request, response: Response){
         const userID = request.params.id;
-        const prisma = new PrismaClient();
-        const user = await prisma.user.findUnique({
+        const user = await prismaC.user.findUnique({
             "where":{userID}
         });
         response = response.status(200).json(user);
     }
     public async create(request:Request, response: Response){
         const {name, email, cpf, status, password} = request.body;
-        const prisma = new PrismaClient();
-        const user = await prisma.user.create({
+        const user = await prismaC.user.create({
            data: {
                email,
                password,
@@ -32,8 +29,7 @@ export class UsersController {
     public async update(request:Request, response: Response){
         const userID = request.params.id;
         const {name, email, cpf, status, password} = request.body;
-        const prisma = new PrismaClient();
-        const user = await prisma.user.update({
+        const user = await prismaC.user.update({
            where:{userID},
            data: {
                email,
@@ -47,8 +43,7 @@ export class UsersController {
     }
     public async delete(request: Request, response: Response){
         const userID = request.params.id;
-        const prisma = new PrismaClient();
-        const user = await prisma.user.delete({
+        const user = await prismaC.user.delete({
             "where":{userID}
         });
         response = response.status(200).json({});

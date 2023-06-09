@@ -1,24 +1,21 @@
-import {PrismaClient} from '@prisma/client'
 import {Request, Response} from "express"
+import { prismaC } from '../prisma';
 
 export class RoutesController {
     public async list(_request: Request, response: Response){
-        const prisma = new PrismaClient();
-        const routes = await prisma.route.findMany();
+        const routes = await prismaC.route.findMany();
         response = response.status(200).json(routes);
     }
     public async show(request: Request, response: Response){
         const routeID = request.params.id;
-        const prisma = new PrismaClient();
-        const routes = await prisma.route.findUnique({
+        const routes = await prismaC.route.findUnique({
             "where":{routeID}
         });
         response = response.status(200).json(routes);
     }
     public async create(request:Request, response: Response){
         const {horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados} = request.body;
-        const prisma = new PrismaClient();
-        const route = await prisma.route.create({
+        const route = await prismaC.route.create({
            data: {
             horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados
            },
@@ -28,8 +25,7 @@ export class RoutesController {
     public async update(request:Request, response: Response){
         const routeID = request.params.id;
         const {horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados} = request.body;
-        const prisma = new PrismaClient();
-        const route = await prisma.route.update({
+        const route = await prismaC.route.update({
            where:{routeID},
            data: {
             horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados
@@ -39,8 +35,7 @@ export class RoutesController {
     }
     public async delete(request: Request, response: Response){
         const routeID = request.params.id;
-        const prisma = new PrismaClient();
-        const user = await prisma.route.delete({
+        const user = await prismaC.route.delete({
             "where":{routeID}
         });
         response = response.status(200).json({});
