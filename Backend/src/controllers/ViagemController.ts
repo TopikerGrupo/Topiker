@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { prismaC } from '../prisma';
-import { buscarChegada } from "./viagens";
+import { buscarChegada, calculaPreco } from "./viagens";
 
 export class ViagemController {
     public async show(request: Request, response: Response) {
@@ -8,8 +8,8 @@ export class ViagemController {
         let rotas = await prismaC.route.findMany({
             where: {saida}
         })
-        let rotasCompletas
-        rotasCompletas = []
+        let viagensCompletas
+        viagensCompletas = []
         let rotaTentativa
         rotas = Array(rotas)[0]
         // Transformar as rotas em um Array para poder ser usada no for
@@ -21,15 +21,19 @@ export class ViagemController {
                 // Se a rota tiver sido encontrada
                 rotaTentativa.unshift(rotas[i])
                 // Adiciona a primeira rota
-                rotasCompletas.push(rotaTentativa)
+                viagensCompletas.push(rotaTentativa)
                 // Adiciona no resultado
             }
             if (rotas[i].chegada==chegada) {
-                rotasCompletas.push([rotas[i]])
+                viagensCompletas.push([rotas[i]])
                 // Se foi encontrado usando apenas uma rota
             }
         }
-        return response.status(200).json(rotasCompletas);
+        let preco;
+        preco = []
+        viagensCompletas.forEach(rotas => {
+            preco.push(calculaPreco(rotas));
+        });
+        return response.status(200).json({"viagens": viagensCompletas,"precos": preco});
     }
-    
 }

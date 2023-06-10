@@ -1,3 +1,4 @@
+import internal from "stream";
 import { prismaC } from "../prisma";
 
 export async function buscarChegada(saida: string, horarioSaida: string, buscaFinal: string) {
@@ -44,4 +45,14 @@ export async function buscarChegada(saida: string, horarioSaida: string, buscaFi
         });
     }
     return resultadoFinal;
+}
+
+export function calculaPreco(rotas){
+    let precoPassageiro = 0
+    let precoCarga = 0
+    rotas.forEach(rota => {
+        precoPassageiro += rota.PrecoPassageiro*rota.distanciaKm
+        precoCarga += rota.PrecoCarga*rota.distanciaKm
+    });
+    return {"PrecoCarga": precoCarga, "PrecoPassageiro": precoPassageiro}
 }
