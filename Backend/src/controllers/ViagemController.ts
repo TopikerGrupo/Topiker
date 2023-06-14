@@ -1,9 +1,10 @@
 import { Request, Response } from "express"
 import { prismaC } from '../prisma';
 import { buscarChegada, calculaPreco } from "./viagens";
+import { AppError } from "../errors/AppError";
 
 export class ViagemController {
-    public async show(request: Request, response: Response) {
+    public async list(request: Request, response: Response) {
         let { saida, chegada } = request.body;
         let rotas = await prismaC.route.findMany({
             where: {saida}
@@ -34,6 +35,9 @@ export class ViagemController {
         viagensCompletas.forEach(rotas => {
             preco.push(calculaPreco(rotas));
         });
+        if (!viagensCompletas[0]){
+            throw new AppError("Viagens not Found", 404);
+        }
         return response.status(200).json({"viagens": viagensCompletas,"precos": preco});
     }
 }
