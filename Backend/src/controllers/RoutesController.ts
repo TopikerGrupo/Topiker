@@ -10,7 +10,18 @@ export class RoutesController {
     public async show(request: Request, response: Response){
         const routeID = request.params.id;
         const routes = await prismaC.route.findUnique({
-            "where":{routeID}
+            "where":{routeID},
+            "include": {
+                "passageiro": {
+                  "select": {
+                    "name": true,
+                    "email": true,
+                    "userID": true,
+                    "status": true,
+                    "cpf": true,
+                  },
+                },
+              },
         });
         if (!routes){
             throw new AppError("route not Found", 404);
@@ -28,7 +39,7 @@ export class RoutesController {
     }
     public async update(request:Request, response: Response){
         const routeID = request.params.id;
-        const {horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados} = request.body;
+        const {horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados, passageiroID} = request.body;
         const routeExist = await prismaC.route.findUnique({
             "where":{routeID}
         });
@@ -38,7 +49,10 @@ export class RoutesController {
         const route = await prismaC.route.update({
            where:{routeID},
            data: {
-            horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados
+            horarioSaida, horarioChegada, saida, chegada, distanciaKm, PrecoPassageiro, PrecoCarga, IDTopic, quantAcentosOcupados,
+            passageiro:{
+                connect:{"userID": passageiroID}
+            },
            },
         });
         return response.status(200).json(route);

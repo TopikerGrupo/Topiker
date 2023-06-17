@@ -4,13 +4,26 @@ import { AppError } from "../errors/AppError";
 
 export class UsersController {
     public async list(_request: Request, response: Response){
-        const users = await prismaC.user.findMany();
+        const users = await prismaC.user.findMany({"select": {
+            "name": true,
+            "email": true,
+            "userID": true,
+            "status": true,
+            "cpf": true,
+          },});
         response = response.status(200).json(users);
     }
     public async show(request: Request, response: Response){
         const userID = request.params.id;
         const user = await prismaC.user.findUnique({
-            "where":{userID}
+            "where":{userID},
+            "select": {
+                "name": true,
+                "email": true,
+                "userID": true,
+                "status": true,
+                "cpf": true,
+              },
         });
         if (!user){
             throw new AppError("User not Found", 404);

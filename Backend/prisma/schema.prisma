@@ -19,12 +19,13 @@ model User {
   status        Int
   TopicDigirir  Topic[] @relation("TopicDigirir")
   TopicCobrador Topic[] @relation("TopicCobrador")
+  Route         Route[]
 
   @@map("users")
 }
 
 model Route {
-  routeID              String   @id @default(uuid())
+  routeID              String @id @default(uuid())
   horarioSaida         String
   horarioChegada       String
   saida                String
@@ -33,8 +34,9 @@ model Route {
   PrecoPassageiro      Float
   PrecoCarga           Float
   IDTopic              String
-  topic                Topic    @relation(fields: [IDTopic], references: [topicID])
-  quantAcentosOcupados Int      
+  topic                Topic  @relation(fields: [IDTopic], references: [topicID])
+  quantAcentosOcupados Int   
+  passageiro         User[]
 
   @@map("routes")
 }
