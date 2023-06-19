@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { prismaC } from '../prisma';
-import { buscarChegada, calculaPreco } from "./viagens";
+import { buscarChegada, calculaPreco } from "../utils/viagens";
 import { AppError } from "../errors/AppError";
 
 export class ViagemController {
