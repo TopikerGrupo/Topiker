@@ -2,6 +2,7 @@ import {Request, Response} from "express"
 import { prismaC } from '../prisma';
 import { AppError } from "../errors/AppError";
 import Zod from 'zod';
+import { hash } from 'bcrypt';
 export class UsersController {
     public async list(_request: Request, response: Response){
         const users = await prismaC.user.findMany({"select": {
@@ -39,10 +40,11 @@ export class UsersController {
             password: Zod.string().min(6),
         }).strict();
         const {name, email, cpf, status, password} = bodySchema.parse(request.body);
+        const password_hash = await hash(password, 6);
         const user = await prismaC.user.create({
            data: {
                email,
-               password,
+               "password": password_hash,
                cpf,
                name,
                status
