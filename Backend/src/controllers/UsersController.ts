@@ -1,7 +1,7 @@
 import {Request, Response} from "express"
 import { prismaC } from '../prisma';
 import { AppError } from "../errors/AppError";
-
+import Zod from 'zod';
 export class UsersController {
     public async list(_request: Request, response: Response){
         const users = await prismaC.user.findMany({"select": {
@@ -31,7 +31,14 @@ export class UsersController {
         response = response.status(200).json(user);
     }
     public async create(request:Request, response: Response){
-        const {name, email, cpf, status, password} = request.body;
+        const bodySchema = Zod.object({
+            name: Zod.string(),
+            email: Zod.string().email(),
+            cpf: Zod.string(),
+            status: Zod.number(),
+            password: Zod.string().min(6),
+        }).strict();
+        const {name, email, cpf, status, password} = bodySchema.parse(request.body);
         const user = await prismaC.user.create({
            data: {
                email,
@@ -51,16 +58,23 @@ export class UsersController {
         if (!userExist){
             throw new AppError("User not Found", 404);
         }
-        const {name, email, cpf, status, password} = request.body;
+        const bodySchema = Zod.object({
+            name: Zod.string().nullish(),
+            email: Zod.string().email().nullish(),
+            cpf: Zod.string().nullish(),
+            status: Zod.number().nullish(),
+            password: Zod.string().min(6).nullish(),
+        }).strict();
+        const {name, email, cpf, status, password} = bodySchema.parse(request.body);
+        let data= {}
+        if(name) data = {name};
+        if(email) data = {...data, email};
+        if(cpf) data = {...data, cpf};
+        if(status) data = {...data, status};
+        if(password) data = {...data, password};
         const user = await prismaC.user.update({
            where:{userID},
-           data: {
-               email,
-               password,
-               cpf,
-               name,
-               status
-           },
+           data,
         });
         return response.status(200).json(user);
     }

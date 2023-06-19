@@ -1,7 +1,7 @@
 import {Request, Response} from "express"
 import { prismaC } from '../prisma';
 import { AppError } from "../errors/AppError";
-
+import Zod from 'zod';
 export class TopicsController {
     public async list(_request: Request, response: Response){
         const topics = await prismaC.topic.findMany();
@@ -18,7 +18,12 @@ export class TopicsController {
         response = response.status(200).json(topic);
     }
     public async create(request:Request, response: Response){
-        const {motoristaID, cobradorId, quantidadeAcentos} = request.body;
+        const bodySchema = Zod.object({
+            motoristaID: Zod.string(),
+            cobradorId: Zod.string(),
+            quantidadeAcentos: Zod.number().min(0),
+        }).strict();
+        const {motoristaID, cobradorId, quantidadeAcentos} = bodySchema.parse(request.body);
         const topic = await prismaC.topic.create({
            data: {
             motoristaID, 
@@ -36,14 +41,19 @@ export class TopicsController {
         if (!topicExist){
             throw new AppError("topic not Found", 404);
         }
-        const {motoristaID, cobradorId, quantidadeAcentos} = request.body;
+        const bodySchema = Zod.object({
+            motoristaID: Zod.string().nullish(),
+            cobradorId: Zod.string().nullish(),
+            quantidadeAcentos: Zod.number().min(0).nullish(),
+        }).strict();
+        const {motoristaID, cobradorId, quantidadeAcentos} = bodySchema.parse(request.body);
+        let data= {}
+        if(motoristaID) data = {motoristaID};
+        if(cobradorId) data = {...data, cobradorId};
+        if(quantidadeAcentos) data = {...data, quantidadeAcentos};
         const topic = await prismaC.topic.update({
            where:{topicID},
-           data: {
-            motoristaID, 
-            cobradorId, 
-            quantidadeAcentos
-           },
+           data,
         });
         return response.status(200).json(topic);
     }

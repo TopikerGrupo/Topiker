@@ -9,6 +9,6 @@ const routes = Router();
 routes.use("/users", usersRoutes);
 routes.use("/topics", topicsRoutes);
 routes.use("/routes", routesRoutes);
-routes.use("/viagem", viagemRoutes)
+routes.use("/viagem", viagemRoutes);
 
 export {routes};
