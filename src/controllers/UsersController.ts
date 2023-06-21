@@ -1,7 +1,7 @@
 import {Request, Response} from "express"
 import { prismaC } from '../prisma';
 import { AppError } from "../errors/AppError";
-import Zod from 'zod';
+import Zod, { any } from 'zod';
 import { hash } from 'bcrypt';
 export class UsersController {
     public async list(_request: Request, response: Response){
@@ -67,13 +67,15 @@ export class UsersController {
             status: Zod.number().nullish(),
             password: Zod.string().min(6).nullish(),
         }).strict();
-        const {name, email, cpf, status, password} = bodySchema.parse(request.body);
+        let {name, email, cpf, status, password} = bodySchema.parse(request.body);
+        password = password!
+        const password_hash = await hash(password, 6);
         let data= {}
         if(name) data = {name};
         if(email) data = {...data, email};
         if(cpf) data = {...data, cpf};
         if(status) data = {...data, status};
-        if(password) data = {...data, password};
+        if(password) data = {...data, "password":password_hash};
         const user = await prismaC.user.update({
            where:{userID},
            data,
