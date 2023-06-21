@@ -1,4 +1,4 @@
-import {Request, Response} from "express"
+import {Request, Response} from "express";
 import { prismaC } from '../prisma';
 import { AppError } from "../errors/AppError";
 import Zod from 'zod';
