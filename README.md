@@ -2,7 +2,7 @@
 
 ## Documentação da API backend
 
-A parte do backend do projeto, foi utlizado:
+Na parte do backend do projeto, foi utlizado:
 
 - Node.js 18.15.0
 - TypeScript
